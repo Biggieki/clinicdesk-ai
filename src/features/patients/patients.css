@@ -1,0 +1,653 @@
+/*
+ * Patient Management styles.
+ *
+ * Built on the design system in src/app/globals.css: it reuses the existing
+ * tokens (--ink, --mint, --coral, --muted) and existing classes (.panel,
+ * .avatar, .patient-avatar, .status, .stat-card, .stats-grid, .primary-button,
+ * .welcome-section, .eyebrow). It only adds; it never overrides them.
+ *
+ * Direction-safe: spacing and positioning use logical properties
+ * (inline-start/end instead of left/right) so the layout can mirror for
+ * right-to-left languages such as Arabic.
+ *
+ * Generic primitives (.btn-*, .field*, .app-dialog, .empty-state,
+ * .visually-hidden) are candidates to move into globals.css once a second
+ * module needs them.
+ */
+
+:root {
+  /* Slightly darker than --muted (#9296aa) so small text meets WCAG AA contrast. */
+  --ink-soft: #5d627c;
+  --line: #dfe1ec;
+  --focus: #5b60a1;
+  --danger-ink: #b8382e;
+  --link-teal: #0c7f6a;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Focus visibility (keyboard users) ---------- */
+
+.btn-secondary:focus-visible,
+.btn-danger:focus-visible,
+.primary-button:focus-visible,
+.row-action:focus-visible,
+.back-link:focus-visible,
+.notice-dismiss:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn-secondary,
+.btn-danger {
+  border-radius: 12px;
+  padding: 13px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  transition: .25s ease;
+}
+
+.btn-secondary {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+}
+
+.btn-secondary:hover {
+  border-color: #c4c7da;
+  background: #f6f7fc;
+}
+
+/* Soft Coral background with Midnight ink text: ~7:1 contrast. */
+.btn-danger {
+  border: 0;
+  background: var(--coral);
+  color: var(--ink);
+}
+
+.btn-danger:hover {
+  background: #ff766b;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px #ff8d8355;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-block-end: 18px;
+  border-radius: 6px;
+  color: var(--link-teal);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Notice banner ---------- */
+
+.patients-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block-end: 20px;
+  padding: 13px 16px;
+  border: 1px solid #b8efe0;
+  border-radius: 13px;
+  background: #e5faf3;
+  color: #0b6b59;
+  font-size: 13px;
+  font-weight: 600;
+  animation: slideUp .4s both;
+}
+
+.notice-dismiss {
+  min-width: 32px;
+  min-height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: inherit;
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* ---------- Statistic ---------- */
+
+.patients-stats {
+  margin-block-end: 20px;
+}
+
+.patients-stat-note {
+  color: var(--ink-soft);
+  font-size: 11px;
+}
+
+/* ---------- Toolbar + search ---------- */
+
+.patient-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-block-end: 18px;
+}
+
+.search-field {
+  position: relative;
+  flex: 1 1 280px;
+  max-inline-size: 460px;
+}
+
+.search-icon {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 14px;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 17px;
+  pointer-events: none;
+}
+
+.search-input,
+.field-control {
+  inline-size: 100%;
+  min-block-size: 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 14px;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+
+.search-input {
+  padding-block: 0;
+  padding-inline: 40px 14px;
+  background: #f8f9fd;
+}
+
+.search-input:focus,
+.field-control:focus {
+  outline: 2px solid transparent; /* stays visible in forced-colors mode */
+  outline-offset: 2px;
+  border-color: var(--focus);
+  background: #fff;
+  box-shadow: 0 0 0 3px #a99bff40;
+}
+
+.result-count {
+  margin: 0;
+  margin-inline-start: auto;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+/* ---------- Patient table (desktop) ---------- */
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.patient-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.patient-table th,
+.patient-table td {
+  padding: 13px 12px;
+  border-block-start: 1px solid #f0f0f5;
+  color: var(--ink-soft);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.patient-table thead th {
+  padding-block: 0 10px;
+  border-block-start: 0;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.patient-table tbody tr {
+  transition: background .2s;
+}
+
+.patient-table tbody tr:hover {
+  background: #f8f8fd;
+}
+
+.patient-table tbody th {
+  font-weight: 400;
+}
+
+.cell-id {
+  color: var(--ink);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-inline-size: 0;
+}
+
+.patient-name {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.patient-table .status {
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.row-action {
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  padding: 6px 2px;
+  color: var(--link-teal);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.row-action:hover {
+  text-decoration: underline;
+}
+
+.row-action-danger {
+  color: var(--danger-ink);
+}
+
+/* Status variants (extend the dashboard's .status pill) */
+.status.active {
+  color: #0f836a;
+  background: #e5faf3;
+}
+
+.status.inactive {
+  color: #5f647c;
+  background: #eef0f6;
+}
+
+.status.inactive i {
+  background: #a3a8bd;
+}
+
+/* ---------- Empty states ---------- */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 44px 20px;
+  text-align: center;
+}
+
+.empty-icon {
+  display: grid;
+  place-items: center;
+  inline-size: 54px;
+  block-size: 54px;
+  border-radius: 16px;
+  background: #eeeaff;
+  color: #8c7ae9;
+  font-size: 24px;
+}
+
+.empty-state h3 {
+  margin: 6px 0 0;
+  font-size: 16px;
+}
+
+.empty-state p {
+  max-inline-size: 440px;
+  margin: 0 0 10px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ---------- Dialogs (native <dialog>) ---------- */
+
+.app-dialog {
+  inline-size: min(460px, calc(100vw - 32px));
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 30px 70px #11152b55;
+}
+
+.app-dialog::backdrop {
+  background: #11152bb0;
+  backdrop-filter: blur(3px);
+}
+
+.app-dialog[open] {
+  animation: slideUp .25s both;
+}
+
+.dialog-body {
+  padding: 26px;
+}
+
+.dialog-body h3 {
+  margin: 0 0 14px;
+  font-size: 18px;
+  letter-spacing: -.4px;
+  overflow-wrap: anywhere;
+}
+
+.dialog-text p {
+  margin: 0 0 10px;
+  color: #3b405c;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.dialog-text .dialog-note {
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-block-start: 22px;
+}
+
+.detail-list {
+  margin: 0;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  gap: 12px;
+  padding-block: 11px;
+  border-block-start: 1px solid #f0f0f5;
+  font-size: 13px;
+}
+
+.detail-row:first-child {
+  padding-block-start: 0;
+  border-block-start: 0;
+}
+
+.detail-row dt {
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.detail-row dd {
+  margin: 0;
+  color: #242841;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.not-provided {
+  color: var(--ink-soft);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ---------- Add / edit form ---------- */
+
+.patient-form-panel {
+  margin-block-end: 20px;
+}
+
+.form-alert {
+  margin-block-end: 18px;
+  padding: 13px 16px;
+  border: 1px solid #ffc9c3;
+  border-radius: 13px;
+  background: #fff0ee;
+  color: var(--danger-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+
+.form-span-2 {
+  grid-column: 1 / -1;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-inline-size: 0;
+}
+
+.field-label {
+  color: #242841;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.field-required {
+  color: #c0392b;
+}
+
+.field-control {
+  padding-block: 0;
+  padding-inline: 13px;
+}
+
+.field-control[aria-invalid="true"] {
+  border-color: #e0675d;
+  background: #fffafa;
+}
+
+.field-hint,
+.field-error {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.field-hint {
+  color: var(--ink-soft);
+}
+
+.field-error {
+  color: var(--danger-ink);
+  font-weight: 600;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-block-start: 22px;
+}
+
+.form-legend {
+  margin: 0;
+  margin-inline-end: auto;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.form-actions .primary-button {
+  padding: 14px 24px;
+  font-size: 12px;
+}
+
+/* ---------- Responsive (globals.css breakpoints: 1100 / 760 / 480) ---------- */
+
+/* Table rows become stacked cards before the columns get cramped. */
+@media (max-width: 1000px) {
+  .table-wrap {
+    overflow: visible;
+  }
+
+  .patient-table,
+  .patient-table tbody {
+    display: block;
+  }
+
+  /* Visually hidden, not display:none, so the header text stays available. */
+  .patient-table thead {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .patient-table tbody tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 16px;
+    margin-block-start: 10px;
+    padding: 16px;
+    border: 1px solid #eceef6;
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  .patient-table tbody tr:hover {
+    background: #fff;
+  }
+
+  .patient-table td,
+  .patient-table tbody th {
+    display: block;
+    padding: 0;
+    border: 0;
+  }
+
+  .patient-table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-block-end: 2px;
+    color: var(--ink-soft);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  .patient-table .cell-name {
+    grid-column: 1 / -1;
+    order: -1; /* name first on the card */
+  }
+
+  .patient-table .cell-actions {
+    grid-column: 1 / -1;
+    padding-block-start: 10px;
+    border-block-start: 1px solid #f0f0f5;
+  }
+
+  .patient-table .cell-actions::before {
+    display: none;
+  }
+
+  .row-actions {
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .row-action {
+    display: inline-flex;
+    align-items: center;
+    min-inline-size: 44px;
+    min-block-size: 40px;
+    padding-inline: 12px;
+  }
+}
+
+@media (max-width: 760px) {
+  /* 16px inputs stop iOS Safari from zooming the page on focus. */
+  .search-input,
+  .field-control {
+    font-size: 16px;
+  }
+
+  .search-field {
+    max-inline-size: none;
+  }
+
+  .result-count {
+    margin-inline-start: 0;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .form-actions > * {
+    inline-size: 100%;
+  }
+
+  .form-legend {
+    text-align: start;
+  }
+
+  .dialog-actions > * {
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .patient-table tbody tr {
+    grid-template-columns: 1fr;
+  }
+}
